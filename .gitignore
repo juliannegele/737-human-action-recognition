@@ -6,6 +6,4 @@ raw_data/
 *.csv
 **/__pycache__/
 .env
-notebooks/Base_model_phil.ipynb
-notebooks/philkolling_test_note.ipynb
-notebooks/737_notebook_get_clean_data_v2.ipynb
+notebooks/
