@@ -2,15 +2,16 @@ import os
 
 import cv2
 
+import numpy as np
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from google.cloud import storage
-from googleapiclient.discovery import build
+#from googleapiclient.discovery import build
 
 from tensorflow.keras.models import load_model
 
-from params import *
+from api.params import *
 
 app = FastAPI()
 
@@ -26,28 +27,29 @@ app.add_middleware(
 def index():
     return dict(greeting = "Welcome!")
 
+
 @app.get("/predict")
 def predict(file_name):
 
     # downloading the video
-    client = storage.Client.from_service_account_json("/home/lockke/code/Koprivnica/gcp/peppy-webbing-332911-743c3173bc03.json")
+    client = storage.Client.from_service_account_json("/Users/philkolling/code/philkolling/gcp/peppy-webbing-332911-743c3173bc03.json")
     bucket = client.get_bucket('737-human-action-recognition-bucket')
 
     blob = bucket.blob(f"{GCP_PATH}/{file_name}")
 
-    blob.download_to_filename(f"video/{file_name}")
+    blob.download_to_filename(f"api/video/{file_name}")
 
-    video_reader = cv2.VideoCapture(f"video/{file_name}")
+    video_reader = cv2.VideoCapture(f"api/video/{file_name}")
 
-    original_video_width = int(video_reader.get(cv2.CAP_PROP_FRAME_WIDTH))
-    original_video_height = int(video_reader.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    #original_video_width = int(video_reader.get(cv2.CAP_PROP_FRAME_WIDTH))
+    #original_video_height = int(video_reader.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
 
-
-    # extracting the frames
+    SEQUENCE_LENGTH = 10
+    #extracting the frames
     frames_list = []
 
-    predicted_class_name = ""
+    #predicted_class_name = ""
 
     video_frames_count = int(video_reader.get(cv2.CAP_PROP_FRAME_COUNT))
 
@@ -67,10 +69,10 @@ def predict(file_name):
 
         frames_list.append(normalized_frame)
 
-    
+    #return print(frames_list)
 
     # predicting
-    model = load_model("../model_test.h5")
+    model = load_model("model_test.h5")
 
     predicted_labels_probabilites = model.predict(np.expand_dims(frames_list, axis=0))[0]
 
@@ -80,6 +82,6 @@ def predict(file_name):
 
     video_reader.release()
 
-    os.remove(f"video/{file_name}")
-    
-    return dict(predicted_class = predicted_class_name, probability = predicted_labels_probabilites[predicted_label])
+    os.remove(f"api/video/{file_name}")
+
+    return (f"predicted_class : {predicted_class_name}")

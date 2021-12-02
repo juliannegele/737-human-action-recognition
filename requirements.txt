@@ -30,6 +30,7 @@ termcolor
 
 fastapi
 uvicorn
+opencv-contrib-python
 opencv-python
 tensorflow
 keras
