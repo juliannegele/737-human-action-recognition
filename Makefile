@@ -56,3 +56,10 @@ pypi:
 
 run_api:
 	uvicorn api.api:app --reload  # load web server with code autoreload
+
+
+#-------------------------------
+# Streamlit
+
+streamlit:
+	-@streamlit run app.py

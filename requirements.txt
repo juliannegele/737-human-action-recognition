@@ -34,3 +34,6 @@ opencv-contrib-python
 opencv-python
 tensorflow
 keras
+python-multipart
+
+streamlit
