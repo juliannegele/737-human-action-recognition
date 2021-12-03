@@ -54,8 +54,9 @@ IMAGE_HEIGHT = 64
 
 IMAGE_WIDTH = 64
 
-st.header("Let's predict something")
-h = st.file_uploader("choose file from your computer",type=[".mp4"])
+st.header("Let's predict some actions taking place in your personal video!")
+st.subheader("Start by clicking the 'Browse files' button")
+h = st.file_uploader(" ",type=[".mp4"])
 if h is not None:
     st.markdown('''
         <style>
@@ -68,7 +69,7 @@ if h is not None:
 
         with st.spinner('Your video is being analyzed'):
             time.sleep(5)
-            st.success('Done!')
+            #st.success('Done!')
 
         tfile = tempfile.NamedTemporaryFile(delete=False)
         tfile.write(h.read())
@@ -121,10 +122,10 @@ if h is not None:
 
             return pred
         prediction = get_pred()
-        st.info(f"Your video is about: {prediction[18:]}")
+        st.success(f"Done! - Your video is about: {prediction[18:]}")
 
-        if f"{prediction[19:]}" in h.name:
-            st.balloons()
+        #if f"{prediction[19:]}" in h.name:
+        #   st.balloons()
 else:
-    st.info("Come on!")
+    st.info("Don't let the kitten wait!")
     st.image("test_image.jpeg")
